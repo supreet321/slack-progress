@@ -1,8 +1,9 @@
 # Slack::Progress
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/slack/progress`. To experiment with that code, run `bin/console` for an interactive prompt.
+## Demo
 
-TODO: Delete this and the text above, and describe your gem
+![Demo](https://i.imgur.com/3BFrK53.gif)
+
 
 ## Installation
 
@@ -21,8 +22,26 @@ Or install it yourself as:
     $ gem install slack-progress
 
 ## Usage
+Pre-requisites:
+- A slack app for your workspace with `chat:write` permissions.
+- Channel ID where messages should be posted (starts with 'C')
+Then you can run the following 
+```ruby
+token = YOUR_BOT_TOKEN_HERE # Required
+channel_id = YOUR_CHANNEL_ID_HERE # Required (Note: this is different from Channel name)
+title = 'My Progress:' # Optional (Default is '')
 
-TODO: Write usage instructions here
+p = SlackProgress.new(token, channel_id, {title: title})
+thread_id = nil
+count = 0
+
+while count <= 50
+  response = p.update_progress(thread_id: thread_id, current_value: count, max_value: 50)
+  thread_id = response.thread_id
+  count += 1
+  sleep (1)
+end
+```
 
 ## Development
 
