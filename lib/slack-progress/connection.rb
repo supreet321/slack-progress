@@ -25,8 +25,11 @@ module SlackProgress
       raw_response = Faraday.post(url) do |req|
         req.headers['Content-Type'] = 'application/x-www-form-urlencoded'
         req.body = URI.encode_www_form(data)
+        req.options[:timeout] = 2
+        req.options[:open_timeout] = 2
       end
 
+      handle_errors(raw_response)
       parsed_response(raw_response)
     end
 
@@ -37,6 +40,15 @@ module SlackProgress
       form_data.merge!(ts: thread_id) if thread_id
       form_data.merge!(@app_options.to_h)
       form_data
+    end
+
+    def handle_errors(response)
+      raise SlackProgress::ConnectionError, "Received #{response.status}" unless response.success?
+
+      parsed_response = JSON.parse(response.body)
+      if parsed_response['ok'] == false
+        raise SlackProgress::InvalidRequestError, "Error: #{parsed_response['error']}"
+      end
     end
 
     def parsed_response(response)
