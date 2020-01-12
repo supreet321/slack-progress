@@ -6,6 +6,9 @@ module SlackProgress
     end
 
     def build_message(current_value, max_value)
+      return if current_value > max_value
+      return if current_value < 0 || max_value < 0
+
       num_boxes = 10
 
       ratio = current_value.to_f / max_value.to_f

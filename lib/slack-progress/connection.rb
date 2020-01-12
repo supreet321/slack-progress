@@ -19,6 +19,8 @@ module SlackProgress
     end
 
     def send_request(text, thread_id)
+      return unless text
+
       url = thread_id.nil? ? NEW_MESSAGE_URL : UPDATE_MESSAGE_URL
       data = build_form_data(text, thread_id)
 
