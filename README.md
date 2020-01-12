@@ -1,4 +1,4 @@
-# Slack::Progress
+# SlackProgress
 
 ## Demo
 
